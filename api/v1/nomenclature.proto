@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package github.com.mrbeaver1.tshirts_back.nomenclature;
+
+option go_package = "github.com/mrbeaver1/tshirts_back/pkg/api/nomenclature;nomenclature";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service NomenclatureService {
+  rpc CreateNomenclature(CreateNomenclatureRequest) returns (CreateNomenclatureResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/nomenclature"
+      body: "*"
+    };
+  }
+  rpc GetLeadsList(GetNomenclatureListRequest) returns (GetNomenclatureListResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/nomenclature"
+    };
+  }
+}
+
+message CreateNomenclatureRequest {
+  string title = 1;
+}
+
+message CreateNomenclatureResponse {
+  NomenclatureData data = 1;
+}
+
+message GetNomenclatureListRequest {
+
+}
+
+message NomenclatureData {
+  uint64 id = 1;
+  string title = 2;
+  uint64 color = 3;
+  uint64 status = 4;
+  string createdAt = 5;
+  string updatedAt = 6;
+}
+
+message GetNomenclatureListResponse {
+  repeated NomenclatureData data = 1;
+}

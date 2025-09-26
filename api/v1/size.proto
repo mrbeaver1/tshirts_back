@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package github.com.mrbeaver1.tshirts_back.size;
+
+option go_package = "github.com/mrbeaver1/tshirts_back/pkg/api/size;size";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service SizeService {
+  rpc CreateSize(CreateSizeRequest) returns (CreateSizeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/size"
+      body: "*"
+    };
+  }
+  rpc GetSizesList(GetSizesListRequest) returns (GetSizesListResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/size"
+    };
+  }
+}
+
+message CreateSizeRequest {
+  uint64 russianStandard = 1;
+  string internationalStandard = 2;
+  SizeDimensions dimensions = 3;
+}
+
+message CreateSizeResponse {
+  SizeData data = 1;
+}
+
+message GetSizesListRequest {
+
+}
+
+message SizeData {
+  uint64 id = 1;
+  uint64 russianStandard = 2;
+  string internationalStandard = 3;
+  SizeDimensions dimensions = 4;
+  string createdAt = 5;
+  string updatedAt = 6;
+}
+
+message GetSizesListResponse {
+  repeated SizeData data = 1;
+}
+
+message SizeDimensions {
+  uint64 width = 1;
+  uint64 height = 2;
+}

@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package github.com.mrbeaver1.tshirts_back.card;
+
+option go_package = "github.com/mrbeaver1/tshirts_back/pkg/api/card;card";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service CardService {
+  rpc CreateCard(CreateCardRequest) returns (CreateCardResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/card"
+      body: "*"
+    };
+  }
+  rpc GetCardsList(GetCardsListRequest) returns (GetCardsListResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/card"
+    };
+  }
+}
+
+message CreateCardRequest {
+  uint64 nomenclatureId = 1;
+  string title = 2;
+  string description = 3;
+  string sku = 4;
+  int64 quantity = 5;
+  uint64 sizeId = 6;
+  string barcode = 7;
+}
+
+message CreateCardResponse {
+  CardData data = 1;
+}
+
+message GetCardsListRequest {
+
+}
+
+message CardData {
+  uint64 id = 1;
+  uint64 nomenclatureId = 2;
+  string title = 3;
+  string description = 4;
+  string sku = 5;
+  int64 quantity = 6;
+  uint64 sizeId = 7;
+  string barcode = 8;
+  string createdAt = 9;
+  string updatedAt = 10;
+}
+
+message GetCardsListResponse {
+  repeated CardData data = 1;
+}

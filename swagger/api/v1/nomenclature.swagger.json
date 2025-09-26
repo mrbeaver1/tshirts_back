@@ -1,0 +1,156 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/v1/nomenclature.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "NomenclatureService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/nomenclature": {
+      "get": {
+        "operationId": "NomenclatureService_GetLeadsList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/nomenclatureGetNomenclatureListResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "NomenclatureService"
+        ]
+      },
+      "post": {
+        "operationId": "NomenclatureService_CreateNomenclature",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/nomenclatureCreateNomenclatureResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/nomenclatureCreateNomenclatureRequest"
+            }
+          }
+        ],
+        "tags": [
+          "NomenclatureService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "nomenclatureCreateNomenclatureRequest": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "nomenclatureCreateNomenclatureResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/nomenclatureNomenclatureData"
+        }
+      }
+    },
+    "nomenclatureGetNomenclatureListResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/nomenclatureNomenclatureData"
+          }
+        }
+      }
+    },
+    "nomenclatureNomenclatureData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "title": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "status": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

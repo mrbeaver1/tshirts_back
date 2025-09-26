@@ -1,0 +1,110 @@
+services:
+  main-db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DBNAME}
+    ports:
+      - ${DB_PORT}:5432
+    volumes:
+      - main_db:/var/lib/postgresql/data
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    command: start-dev
+    restart: always
+    environment:
+      #      KC_HOSTNAME: ${KC_URL}
+      #      KC_HOSTNAME_PORT: ${KC_HOSTNAME_PORT}
+      KC_DB_URL_DATABASE: ${KC_DB_DBNAME}
+      KC_DB: ${KC_DB_TYPE}
+      KC_DB_URL_HOST: ${KC_DB_HOST}
+      KC_DB_USERNAME: ${KC_DB_USER}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
+      KC_HEALTH_ENABLED: "true"
+      KC_LOG_LEVEL: info
+    depends_on:
+      - keycloak-db
+    ports:
+      - ${KC_HOSTNAME_PORT}:8080
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "2"
+        max-size: "100m"
+
+  keycloak-db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: ${KC_DB_USER}
+      POSTGRES_PASSWORD: ${KC_DB_PASSWORD}
+      POSTGRES_DB: ${KC_DB_DBNAME}
+    ports:
+      - ${KC_DB_PORT}:5432
+    volumes:
+      - kc_db:/var/lib/postgresql/data
+
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    command: server /data --console-address ":9001"
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
+
+#  migrator:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.migrator
+#    environment:
+#      DB_HOST: main-db
+#      DB_PORT: ${DB_DBNAME}
+#      DB_USER: ${DB_USER}
+#      DB_PASSWORD: ${DB_PASSWORD}
+#      DB_NAME: ${DB_PORT}
+#      DB_SSLMODE: disable
+#    depends_on:
+#      main-db:
+#        condition: service_healthy
+
+  app:
+    build: .
+    ports:
+      - "50051:50051"
+      - "8080:8080"
+#    environment:
+#      DB_HOST: postgres
+#      DB_PORT: 5432
+#      DB_USER: postgres
+#      DB_PASSWORD: password
+#      DB_NAME: t_shirts
+#      DB_SSLMODE: disable
+#      KEYCLOAK_URL: http://keycloak:8080
+#      KEYCLOAK_REALM: t-shirts
+#      KEYCLOAK_CLIENT_ID: api
+#      MINIO_ENDPOINT: minio:9000
+#      MINIO_ACCESS_KEY: minioadmin
+#      MINIO_SECRET_KEY: minioadmin
+#      MAILPIT_URL: http://mailpit:8025
+#      GRPC_PORT: 50051
+#      HTTP_PORT: 8080
+    depends_on:
+      - main-db
+#        condition: service_healthy
+#      migrator:
+#        condition: service_completed_successfully
+
+volumes:
+  kc_db:
+  main_db:

@@ -1,0 +1,175 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/v1/size.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "SizeService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/size": {
+      "get": {
+        "operationId": "SizeService_GetSizesList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/sizeGetSizesListResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "SizeService"
+        ]
+      },
+      "post": {
+        "operationId": "SizeService_CreateSize",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/sizeCreateSizeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/sizeCreateSizeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SizeService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "sizeCreateSizeRequest": {
+      "type": "object",
+      "properties": {
+        "russianStandard": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "internationalStandard": {
+          "type": "string"
+        },
+        "dimensions": {
+          "$ref": "#/definitions/sizeSizeDimensions"
+        }
+      }
+    },
+    "sizeCreateSizeResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/sizeSizeData"
+        }
+      }
+    },
+    "sizeGetSizesListResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/sizeSizeData"
+          }
+        }
+      }
+    },
+    "sizeSizeData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "russianStandard": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "internationalStandard": {
+          "type": "string"
+        },
+        "dimensions": {
+          "$ref": "#/definitions/sizeSizeDimensions"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "sizeSizeDimensions": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "height": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    }
+  }
+}

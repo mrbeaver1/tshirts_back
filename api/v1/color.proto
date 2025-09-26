@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package github.com.mrbeaver1.tshirts_back.color;
+
+option go_package = "github.com/mrbeaver1/tshirts_back/pkg/api/color;color";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service ColorService {
+  rpc CreateColor(CreateColorRequest) returns (CreateColorResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/color"
+      body: "*"
+    };
+  }
+  rpc GetColorsList(GetColorsListRequest) returns (GetColorsListResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/color"
+    };
+  }
+}
+
+message CreateColorRequest {
+  string name = 1;
+  string hex = 2;
+  string rgb = 3;
+}
+
+message CreateColorResponse {
+  ColorData data = 1;
+}
+
+message GetColorsListRequest {
+
+}
+
+message ColorData {
+  uint64 id = 1;
+  string name = 2;
+  string hex = 3;
+  string rgb = 4;
+  string createdAt = 5;
+  string updatedAt = 6;
+}
+
+message GetColorsListResponse {
+  repeated ColorData data = 1;
+}
