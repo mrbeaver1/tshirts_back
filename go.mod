@@ -1,3 +1,3 @@
-module github.com/mrbeaver1/t_shirt
+module github.com/mrbeaver1/tshirts_back
 
 go 1.25.3

@@ -1,7 +1,7 @@
 package domain
 
 import (
-	domainEntity "github.com/mrbeaver1/t_shirt/internal/domain/entity"
+	domainEntity "github.com/mrbeaver1/tshirts_back/internal/domain/entity"
 )
 
 type ProductRepository interface {

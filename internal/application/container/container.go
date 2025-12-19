@@ -1,8 +1,8 @@
 package container
 
 import (
-	domain "github.com/mrbeaver1/t_shirt/internal/domain/repository"
-	infrastructure "github.com/mrbeaver1/t_shirt/internal/infrastructure/repository"
+	domain "github.com/mrbeaver1/tshirts_back/internal/domain/repository"
+	infrastructure "github.com/mrbeaver1/tshirts_back/internal/infrastructure/repository"
 )
 
 type Container struct {

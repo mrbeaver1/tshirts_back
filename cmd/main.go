@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	domainEntity "github.com/mrbeaver1/t_shirt/internal/domain/entity"
+	domainEntity "github.com/mrbeaver1/tshirts_back/internal/domain/entity"
 )
 
 func main() {
