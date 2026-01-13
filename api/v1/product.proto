@@ -1,0 +1,131 @@
+syntax = "proto3";
+
+package api.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/mrbeaver1/tshirts_back/pkg/api/v1;v1";
+
+// Product service definition
+service ProductService {
+  // Get all products
+  rpc GetProducts(GetProductsRequest) returns (GetProductsResponse) {
+    option (google.api.http) = {
+      get: "/v1/products"
+    };
+  }
+
+  // Get product by ID
+  rpc GetProduct(GetProductRequest) returns (GetProductResponse) {
+    option (google.api.http) = {
+      get: "/v1/products/{id}"
+    };
+  }
+
+  // Create a new product
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse) {
+    option (google.api.http) = {
+      post: "/v1/products"
+      body: "product"
+    };
+  }
+
+  // Update an existing product
+  rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse) {
+    option (google.api.http) = {
+      put: "/v1/products/{product.id}"
+      body: "product"
+    };
+  }
+
+  // Delete a product
+  rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse) {
+    option (google.api.http) = {
+      delete: "/v1/products/{id}"
+    };
+  }
+}
+
+// Request message for GetProducts
+message GetProductsRequest {}
+
+// Response message for GetProducts
+message GetProductsResponse {
+  Data data = 1;
+}
+
+message Data {
+  repeated Product products = 1;
+}
+
+// Request message for GetProduct
+message GetProductRequest {
+  uint64 id = 1;
+}
+
+// Response message for GetProduct
+message GetProductResponse {
+  Data data = 1;
+}
+
+message GetData {
+  Product product = 1;
+}
+
+// Request message for CreateProduct
+message CreateProductRequest {
+  Product product = 1;
+}
+
+// Response message for CreateProduct
+message CreateProductResponse {
+  Data data = 1;
+}
+
+message CreateData {
+  Product product = 1;
+}
+
+// Request message for UpdateProduct
+message UpdateProductRequest {
+  Product product = 1;
+}
+
+// Response message for UpdateProduct
+message UpdateProductResponse {
+  Data data = 1;
+}
+
+message UpdateData {
+  Product product = 1;
+}
+
+// Request message for DeleteProduct
+message DeleteProductRequest {
+  uint64 id = 1;
+}
+
+// Response message for DeleteProduct
+message DeleteProductResponse {
+  Data data = 1;
+}
+
+message DeleteData {
+  bool success = 1;
+}
+
+// Product represents a product entity
+message Product {
+  uint64 id = 1;
+  string name = 2;
+  uint64 color_id = 3;
+  uint64 size_id = 4;
+  uint64 quantity = 5;
+  uint64 available = 6;
+  optional uint64 parent_id = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+  optional google.protobuf.Timestamp deleted_at = 10;
+}
