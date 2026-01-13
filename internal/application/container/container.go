@@ -1,21 +1,54 @@
 package container
 
 import (
-	domain "github.com/mrbeaver1/tshirts_back/internal/domain/repository"
-	infrastructure "github.com/mrbeaver1/tshirts_back/internal/infrastructure/repository"
+	usecase "github.com/mrbeaver1/tshirts_back/internal/application/usecase"
+	config "github.com/mrbeaver1/tshirts_back/internal/config"
+	domain_repo "github.com/mrbeaver1/tshirts_back/internal/domain/repository"
+	service "github.com/mrbeaver1/tshirts_back/internal/domain/service"
+	persistence "github.com/mrbeaver1/tshirts_back/internal/infrastructure/persistence"
 )
 
 type Container struct {
-	productRepository domain.ProductRepository
+	cfg            *config.Config
+	productRepo    domain_repo.ProductRepository
+	productService *service.ProductService
+	productUseCase *usecase.ProductUseCase
 }
 
 func NewContainer() *Container {
-	return &Container{}
+	cfg := config.LoadConfig()
+
+	return &Container{
+		cfg: cfg,
+	}
 }
 
-func (c *Container) GetProductRepository() domain.ProductRepository {
-	if c.productRepository == nil {
-		c.productRepository = infrastructure.NewInMemoryProductRepository()
+func (c *Container) GetProductUseCase() *usecase.ProductUseCase {
+	if c.productUseCase == nil {
+		c.productUseCase = usecase.NewProductUseCase(c.GetProductService())
 	}
-	return c.productRepository
+	return c.productUseCase
+}
+
+func (c *Container) GetProductService() *service.ProductService {
+	if c.productService == nil {
+		c.productService = service.NewProductService(c.GetProductRepository())
+	}
+	return c.productService
+}
+
+func (c *Container) GetProductRepository() domain_repo.ProductRepository {
+	if c.productRepo == nil {
+		// Можно выбрать реализацию репозитория в зависимости от конфигурации
+		// Для примера используем InMemory реализацию
+		c.productRepo = persistence.NewInMemoryProductRepository()
+
+		// Или использовать PostgreSQL реализацию
+		// db, err := ConnectToPool()
+		// if err != nil {
+		//     panic(err)
+		// }
+		// c.productRepo = persistence.NewPostgresProductRepository(db)
+	}
+	return c.productRepo
 }

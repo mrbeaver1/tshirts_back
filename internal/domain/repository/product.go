@@ -1,13 +1,13 @@
 package domain
 
 import (
-	domainEntity "github.com/mrbeaver1/tshirts_back/internal/domain/entity"
+	entity "github.com/mrbeaver1/tshirts_back/internal/domain/entity"
 )
 
 type ProductRepository interface {
-	FindAll() []*domainEntity.Product
-	FindOneById(id uint64) *domainEntity.Product
-	Create(p *domainEntity.Product)
-	Update(p *domainEntity.Product)
+	FindAll() []*entity.Product
+	FindOneById(id uint64) *entity.Product
+	Create(p *entity.Product)
+	Update(p *entity.Product)
 	Delete(id uint64)
 }

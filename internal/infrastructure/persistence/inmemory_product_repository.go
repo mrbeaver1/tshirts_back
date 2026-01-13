@@ -1,36 +1,36 @@
-package infrastructure
+package persistence
 
 import (
 	"sync"
 
-	domainEntity "github.com/mrbeaver1/tshirts_back/internal/domain/entity"
+	entity "github.com/mrbeaver1/tshirts_back/internal/domain/entity"
 )
 
 type InMemoryProductRepository struct {
-	products map[uint64]*domainEntity.Product
+	products map[uint64]*entity.Product
 	mutex    sync.RWMutex
 	nextId   uint64
 }
 
 func NewInMemoryProductRepository() *InMemoryProductRepository {
 	return &InMemoryProductRepository{
-		products: make(map[uint64]*domainEntity.Product),
+		products: make(map[uint64]*entity.Product),
 		nextId:   1,
 	}
 }
 
-func (r *InMemoryProductRepository) FindAll() []*domainEntity.Product {
+func (r *InMemoryProductRepository) FindAll() []*entity.Product {
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 
-	products := make([]*domainEntity.Product, 0, len(r.products))
+	products := make([]*entity.Product, 0, len(r.products))
 	for _, product := range r.products {
 		products = append(products, product)
 	}
 	return products
 }
 
-func (r *InMemoryProductRepository) FindOneById(id uint64) *domainEntity.Product {
+func (r *InMemoryProductRepository) FindOneById(id uint64) *entity.Product {
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 
@@ -40,7 +40,7 @@ func (r *InMemoryProductRepository) FindOneById(id uint64) *domainEntity.Product
 	return nil
 }
 
-func (r *InMemoryProductRepository) Create(p *domainEntity.Product) {
+func (r *InMemoryProductRepository) Create(p *entity.Product) {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 
@@ -49,7 +49,7 @@ func (r *InMemoryProductRepository) Create(p *domainEntity.Product) {
 	r.products[p.Id] = p
 }
 
-func (r *InMemoryProductRepository) Update(p *domainEntity.Product) {
+func (r *InMemoryProductRepository) Update(p *entity.Product) {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 

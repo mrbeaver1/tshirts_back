@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15.0
+    platform: linux/amd64 # Указываем amd64 платформу для совместимости
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: ${DB_NAME:-tshirts}
+      POSTGRES_USER: ${DB_USER:-user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+    ports:
+      - "${LOCAL_DB_PORT:-5432}:${DOCKER_DB_PORT:-5432}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  app:
+    build:
+      context: ..
+      dockerfile: .docker/Dockerfile
+    platform: linux/arm64  # Указываем arm64 платформу для macOS ARM64
+    container_name: go_app
+    ports:
+      - "${LOCAL_APP_PORT:-8080}:${DOCKER_APP_PORT:-8080}"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=${DOCKER_DB_PORT:-5432}
+      - DB_USER=${DB_USER:-user}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
+      - DB_NAME=${DB_NAME:-tshirts}
+    env_file:
+      - ../.env
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
+    driver: bridge
