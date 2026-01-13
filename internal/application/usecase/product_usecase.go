@@ -2,12 +2,17 @@ package usecase
 
 import (
 	entity "github.com/mrbeaver1/tshirts_back/internal/domain/entity"
-	service "github.com/mrbeaver1/tshirts_back/internal/domain/service"
+	"github.com/mrbeaver1/tshirts_back/internal/domain/service"
+	service_impl "github.com/mrbeaver1/tshirts_back/internal/domain/service"
+	service_interface "github.com/mrbeaver1/tshirts_back/internal/domain/service"
 )
 
 type ProductUseCase struct {
-	productService *service.ProductService
+	productService *service_impl.ProductService
 }
+
+// Ensure ProductUseCase implements the ProductUseCaseInterface
+var _ service_interface.ProductUseCaseInterface = (*ProductUseCase)(nil)
 
 func NewProductUseCase(productService *service.ProductService) *ProductUseCase {
 	return &ProductUseCase{productService: productService}

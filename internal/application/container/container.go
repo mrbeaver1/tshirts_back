@@ -5,6 +5,7 @@ import (
 	config "github.com/mrbeaver1/tshirts_back/internal/config"
 	domain_repo "github.com/mrbeaver1/tshirts_back/internal/domain/repository"
 	service "github.com/mrbeaver1/tshirts_back/internal/domain/service"
+	"github.com/mrbeaver1/tshirts_back/internal/infrastructure/database"
 	persistence "github.com/mrbeaver1/tshirts_back/internal/infrastructure/persistence"
 )
 
@@ -41,7 +42,8 @@ func (c *Container) GetProductRepository() domain_repo.ProductRepository {
 	if c.productRepo == nil {
 		// Можно выбрать реализацию репозитория в зависимости от конфигурации
 		// Для примера используем InMemory реализацию
-		c.productRepo = persistence.NewInMemoryProductRepository()
+		pool, _ := database.ConnectToPool()
+		c.productRepo = persistence.NewPostgresProductRepository(pool)
 
 		// Или использовать PostgreSQL реализацию
 		// db, err := ConnectToPool()
